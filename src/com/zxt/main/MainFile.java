@@ -48,7 +48,7 @@ public class MainFile {
 					br = new BufferedReader(fr);
 					String strLine = null;
 					while ((strLine = br.readLine()) != null) {
-						//System.out.println(strLine);
+						// 根据读取的名称调用不同的类方法
 						if (fileName.contains("AP")) {
 							ap.writeString(strLine, br);
 						} else if (fileName.contains("用户")) {
@@ -56,9 +56,13 @@ public class MainFile {
 						} else if (fileName.contains("DHCP")) {
 							dhcp.writeString(strLine, br);
 						} else if(fileName.contains("中兴3期AC01")){
+							AppUI.addText(fileName);
 							zxac.writeFirstString(strLine, br);
-						} else{
+							break;
+						} else if(fileName.contains("中兴3期AC")){
+							AppUI.addText(fileName);
 							zxac.writeString(strLine, br);
+							break;
 						}
 					}
 				}

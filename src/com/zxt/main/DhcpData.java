@@ -14,6 +14,7 @@ public class DhcpData {
 	private static int lie_2 = 0;
 	private static int lie_3 = 4;
 	private WritableSheet sheet;
+
 	DhcpData(WritableSheet sheet) {
 		this.sheet = sheet;
 	}
@@ -44,7 +45,7 @@ public class DhcpData {
 			readData(lie_2, 12, br, "HS");
 			lie_2++;
 		} else {
-			//System.out.println("ZXT");
+			// System.out.println("ZXT");
 		}
 	}
 
@@ -71,9 +72,9 @@ public class DhcpData {
 			e.printStackTrace();
 		}
 		jxl.write.Number addNumber = new jxl.write.Number(lie, hang, Integer.valueOf(number));
-		//Label label = new Label(lie, hang, number);
+		// Label label = new Label(lie, hang, number);
 		try {
-			//sheet.addCell(label);
+			// sheet.addCell(label);
 			sheet.addCell(addNumber);
 		} catch (RowsExceededException e) {
 			AppUI.addText("解析DHCP数据时,表格错误");
@@ -85,41 +86,36 @@ public class DhcpData {
 	}
 
 	public void readAt4Data(BufferedReader br) {
-		for (int i = 0; i < 14; i++) {
-			String str = null;
-			try {
-				str = br.readLine();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			String[] stringData = str.split(" ");
-			String number = AtData(stringData);
-			AppUI.addText(number);
-			System.out.println(number);
-			jxl.write.Number addNumber = new jxl.write.Number(lie_3, 12, Integer.valueOf(number));
-			//Label label = new Label(lie_3, 12, number);
-			try {
-				//sheet.addCell(label);
-				sheet.addCell(addNumber);
-			} catch (RowsExceededException e) {
-				AppUI.addText("解析DHCP数据时,表格错误");
-				e.printStackTrace();
-			} catch (WriteException e) {
-				AppUI.addText("解析DHCP数据时,数据写入错误");
-				e.printStackTrace();
-			}
-			// 当读取到第6行时，要跳过2行才能读到傲天AC25的数据
-			if (i == 6) {
-				i = i + 2;
+		String str = null;
+		String number = null;
+		try {
+			while ((str = br.readLine()) != null) {
+				String[] stringData = str.split(" ");
+				number = AtData(stringData);
+				if(number==null||number.isEmpty()||number.equals(" "))
+					break;
+				AppUI.addText(number);
+				System.out.println(number);
+				jxl.write.Number addNumber = new jxl.write.Number(lie_3, 12, Integer.valueOf(number));
+				// Label label = new Label(lie_3, 12, number);
 				try {
-					br.readLine();
-					br.readLine();
-				} catch (IOException e) {
+					// sheet.addCell(label);
+					sheet.addCell(addNumber);
+				} catch (RowsExceededException e) {
+					AppUI.addText("解析DHCP数据时,表格错误");
+					e.printStackTrace();
+				} catch (WriteException e) {
+					AppUI.addText("解析DHCP数据时,数据写入错误");
 					e.printStackTrace();
 				}
+				lie_3++;
 			}
-			lie_3++;
+		} catch (NumberFormatException e) {
+			AppUI.addText("解析DHCP数据时,转换Integer错误");
+			e.printStackTrace();
+		} catch (IOException e) {
+			AppUI.addText("解析DHCP数据时,IO错误");
+			e.printStackTrace();
 		}
 	}
 

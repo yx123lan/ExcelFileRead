@@ -14,7 +14,8 @@ public class ApData {
 	private static int lie_2 = 0;
 	private static int lie_3 = 8;
 	private WritableSheet sheet;
-	ApData(WritableSheet sheet){
+
+	ApData(WritableSheet sheet) {
 		this.sheet = sheet;
 	}
 
@@ -45,15 +46,16 @@ public class ApData {
 			lie_2++;
 		}
 	}
-	public void readData(int lie, int hang, BufferedReader br, String name){
+
+	public void readData(int lie, int hang, BufferedReader br, String name) {
 		String number = "";
 		try {
 			String str = br.readLine();
 			String[] stringData = str.split(" ");
-			if(name.equals("AT")){
+			if (name.equals("AT")) {
 				number = stringData[0];
-			}else if(name.equals("ZX")||name.equals("HS")){
-				number = stringData[stringData.length-1];
+			} else if (name.equals("ZX") || name.equals("HS")) {
+				number = stringData[stringData.length - 1];
 			}
 			AppUI.addText(number);
 			System.out.println(number);
@@ -62,9 +64,9 @@ public class ApData {
 			e.printStackTrace();
 		}
 		jxl.write.Number addNumber = new jxl.write.Number(lie, hang, Integer.valueOf(number));
-		//Label label = new Label(lie, hang, number);
+		// Label label = new Label(lie, hang, number);
 		try {
-			//sheet.addCell(label);
+			// sheet.addCell(label);
 			sheet.addCell(addNumber);
 		} catch (RowsExceededException e) {
 			AppUI.addText("解析AP在线数据时,表格错误");
@@ -74,43 +76,38 @@ public class ApData {
 			e.printStackTrace();
 		}
 	}
+
 	public void readAt4Data(BufferedReader br) {
-		for (int i = 0; i < 14; i++) {
-			String str = null;
-			try {
-				str = br.readLine();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			String[] stringData = str.split(" ");
-			String number = stringData[0];
-			jxl.write.Number addNumber = new jxl.write.Number(lie_3, 2,Integer.valueOf(number));
-			AppUI.addText(number);
-			System.out.println(number);
-			//Label label = new Label(lie_3, 2, number);
-			try {
-				//sheet.addCell(label);
-				sheet.addCell(addNumber);
-			} catch (RowsExceededException e) {
-				AppUI.addText("解析AP在线数据时,表格错误");
-				e.printStackTrace();
-			} catch (WriteException e) {
-				AppUI.addText("解析AP在线数据时,数据写入错误");
-				e.printStackTrace();
-			}
-			//当读取到第7行时，要跳过2行才能读到傲天AC25的数据
-			if(i==6){
-				i=i+2;
+		String str = null;
+		String number =null;
+		try {
+			while ((str = br.readLine()) != null) {
+				String[] stringData = str.split(" ");
+				number = stringData[0];
+				if(number==null||number.isEmpty()||number.equals(" "))
+					break;
+				jxl.write.Number addNumber = new jxl.write.Number(lie_3, 2, Integer.valueOf(number));
+				AppUI.addText(number);
+				System.out.println(number);
+				// Label label = new Label(lie_3, 2, number);
 				try {
-					br.readLine();
-					br.readLine();
-				} catch (IOException e) {
+					// sheet.addCell(label);
+					sheet.addCell(addNumber);
+				} catch (RowsExceededException e) {
+					AppUI.addText("解析AP在线数据时,表格错误");
+					e.printStackTrace();
+				} catch (WriteException e) {
+					AppUI.addText("解析AP在线数据时,数据写入错误");
 					e.printStackTrace();
 				}
-				System.out.println(""+i);
+				lie_3++;
 			}
-			lie_3++;
+		} catch (NumberFormatException e) {
+			AppUI.addText("解析AP数据时,转换Integer错误");
+			e.printStackTrace();
+		} catch (IOException e) {
+			AppUI.addText("解析AP数据时,IO错误");
+			e.printStackTrace();
 		}
 	}
 }
