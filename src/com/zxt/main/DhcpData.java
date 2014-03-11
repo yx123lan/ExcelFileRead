@@ -3,7 +3,6 @@ package com.zxt.main;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;

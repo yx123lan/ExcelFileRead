@@ -16,6 +16,7 @@ public class AppUI {
 		window.setLayout(new BorderLayout());
 		window.setSize(500, 500);
 		text = new TextArea("点击下面按钮开始解析文档和写入Excel\n");
+		text.setEditable(false);
 		text.setSize(500, 450);
 		Button button = new Button("执行");
 		button.setSize(50, 50);

@@ -82,6 +82,7 @@ public class UserData {
 		String str = null;
 		String oldNumber = "";
 		String number = "";
+		int num = 0;
 		try {
 			while ((str = br.readLine()) != null) {
 				oldNumber = number;
@@ -92,9 +93,18 @@ public class UserData {
 				System.out.println(number);
 				if (number == null || number.isEmpty() || number.equals(" "))
 					break;
-				if(number.equals(oldNumber))
-					continue;
+				// 检查数值是否相同，因为有可能有一次重复的数据。
+				if (number.equals(oldNumber)) {
+					if (num == 1) {
+						// 当计数器为1时，说明已经遇到过一次相同的了，同时不再检查数值是否相同
+					} else {
+						num++;
+						continue;
+					}
+				}
 				jxl.write.Number addNumber = new jxl.write.Number(lie_3, 11, Integer.valueOf(number));
+				// 计数器清零
+				num = 0;
 				// Label label = new Label(lie_3, 11, number);
 				try {
 					// sheet.addCell(label);
