@@ -55,11 +55,11 @@ public class DhcpData {
 			String[] stringData = str.split(" ");
 			if (name.equals("AT")) {
 				number = AtData(stringData);
-				// 当读取的数值是0时，再读取一次数据。
-				while (number.equals("0")) {
-					str = br.readLine();
-					stringData = str.split(" ");
-					number = AtData(stringData);
+				// 因为数据可能有两行，所以读取两次。
+				str = br.readLine();
+				stringData = str.split(" ");
+				if (str != null && !str.isEmpty() && !str.equals(" ")) {
+					number = String.valueOf(Integer.valueOf(number) + Integer.valueOf(AtData(stringData)));
 				}
 			} else if (name.equals("ZX") || name.equals("HS")) {
 				number = stringData[3];
@@ -91,7 +91,7 @@ public class DhcpData {
 			while ((str = br.readLine()) != null) {
 				String[] stringData = str.split(" ");
 				number = AtData(stringData);
-				if(number==null||number.isEmpty()||number.equals(" "))
+				if (number == null || number.isEmpty() || number.equals(" "))
 					break;
 				AppUI.addText(number);
 				System.out.println(number);
