@@ -3,7 +3,6 @@ package com.zxt.main;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
@@ -32,19 +31,18 @@ public class ZxAcManage {
 					num = num + Integer.valueOf(data);
 				}
 			}
-			AppUI.addText("num: " + num);
-			System.out.println("num" + num);
+			System.out.println("num: " + num);
 			jxl.write.Number addNumber = new jxl.write.Number(lie, 9, num);
 			sheet.addCell(addNumber);
 			lie++;
 		} catch (IOException e) {
-			AppUI.addText("½âÎöÖĞĞË3ÆÚAC01µÄDHCPÊı¾İÊ±£¬¶ÁÈ¡ÎÄ±¾ĞĞ´íÎó");
+			System.out.println("è§£æä¸­å…´3æœŸAC01çš„DHCPæ•°æ®æ—¶ï¼Œè¯»å–æ–‡æœ¬è¡Œé”™è¯¯");
 			e.printStackTrace();
 		} catch (RowsExceededException e) {
-			AppUI.addText("½âÎöÖĞĞË3ÆÚACµÄDHCPÊı¾İÊ±£¬±í¸ñ´íÎó");
+			System.out.println("è§£æä¸­å…´3æœŸACçš„DHCPæ•°æ®æ—¶ï¼Œè¡¨æ ¼é”™è¯¯");
 			e.printStackTrace();
 		} catch (WriteException e) {
-			AppUI.addText("½âÎöÖĞĞË3ÆÚACµÄDHCPÊı¾İÊ±£¬Êı¾İĞ´Èë´íÎó");
+			System.out.println("è§£æä¸­å…´3æœŸACçš„DHCPæ•°æ®æ—¶ï¼Œæ•°æ®å†™å…¥é”™è¯¯");
 			e.printStackTrace();
 		}
 	}
@@ -61,7 +59,6 @@ public class ZxAcManage {
 					strLine2 = br.readLine();
 					String[] datas = strLine2.split(" ");
 					String data = datas[datas.length - 1];
-					AppUI.addText("num: " + data);
 					System.out.println("num: " + data);
 					jxl.write.Number addNumber = new jxl.write.Number(lie, 9, Integer.valueOf(data));
 					sheet.addCell(addNumber);
@@ -70,13 +67,13 @@ public class ZxAcManage {
 				}
 			}
 		} catch (IOException e) {
-			AppUI.addText("½âÎöÖĞĞË3ÆÚACµÄDHCPÊı¾İÊ±£¬¶ÁÈ¡ÎÄ±¾ĞĞ´íÎó");
+			System.out.println("è§£æä¸­å…´3æœŸACçš„DHCPæ•°æ®æ—¶ï¼Œè¯»å–æ–‡æœ¬è¡Œé”™è¯¯");
 			e.printStackTrace();
 		} catch (RowsExceededException e) {
-			AppUI.addText("½âÎöÖĞĞË3ÆÚACµÄDHCPÊı¾İÊ±£¬±í¸ñ´íÎó");
+			System.out.println("è§£æä¸­å…´3æœŸACçš„DHCPæ•°æ®æ—¶ï¼Œè¡¨æ ¼é”™è¯¯");
 			e.printStackTrace();
 		} catch (WriteException e) {
-			AppUI.addText("½âÎöÖĞĞË3ÆÚACµÄDHCPÊı¾İÊ±£¬Êı¾İĞ´Èë´íÎó");
+			System.out.println("è§£æä¸­å…´3æœŸACçš„DHCPæ•°æ®æ—¶ï¼Œæ•°æ®å†™å…¥é”™è¯¯");
 			e.printStackTrace();
 		}
 	}

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import jxl.Workbook;
 import jxl.write.WritableSheet;
@@ -20,11 +21,12 @@ public class MainFile {
 	}
 
 	public static void start() {
-		File file = new File("E:/Excel/MyExcel.xls");
+		String path = "D:/Excel/MyExcel.xls";
+		File file = new File(path);
 		try {
 			workbook = Workbook.createWorkbook(file);
 		} catch (IOException e) {
-			AppUI.addText("EXCELÎÄ¼ş´´½¨´íÎó");
+			System.out.println("EXCELæ–‡ä»¶åˆ›å»ºé”™è¯¯");
 			e.printStackTrace();
 		}
 		sheet = workbook.createSheet("First Sheet", 0);
@@ -35,50 +37,54 @@ public class MainFile {
 			UserData user = new UserData(sheet);
 			DhcpData dhcp = new DhcpData(sheet);
 			ZxAcManage zxac = new ZxAcManage(sheet);
-			// °ÑÒª½âÎöµÄÊı¾İµÄÂ·¾¶¶¼·Å½øÒ»¸öStringÊı×é
-			String[] paths = { "E:/ExcelData/", "E:/ZX3/" };
-			// ¶ÁÈ¡Ã¿Ò»¸öÂ·¾¶ÏÂµÄÄÚÈİ
-			for (String path : paths) {
-				File files = new File(path);
-				// °ÑÎÄ¼ş¼ĞÄÚËùÓĞµÄÎÄ¼şµÄÃû³Æ·Å½øÒ»¸öStringÊı×é
-				String[] fileNames = files.list();
-				// ¶ÁÈ¡ÎÄ¼ş¼ĞÄÚµÄÃ¿Ò»¸öÎÄ¼ş
-				for (String fileName : fileNames) {
-					fr = new FileReader(path + fileName);
-					br = new BufferedReader(fr);
-					String strLine = null;
-					while ((strLine = br.readLine()) != null) {
-						// ¸ù¾İ¶ÁÈ¡µÄÃû³Æµ÷ÓÃ²»Í¬µÄÀà·½·¨
-						if (fileName.contains("AP")) {
-							ap.writeString(strLine, br);
-						} else if (fileName.contains("ÓÃ»§")) {
-							user.writeString(strLine, br);
-						} else if (fileName.contains("DHCP")) {
-							dhcp.writeString(strLine, br);
-						} else if(fileName.contains("ÖĞĞË3ÆÚAC01")){
-							AppUI.addText(fileName);
-							zxac.writeFirstString(strLine, br);
-							break;
-						} else if(fileName.contains("ÖĞĞË3ÆÚAC")){
-							AppUI.addText(fileName);
-							zxac.writeString(strLine, br);
-							break;
-						}
+			// æŠŠè¦è§£æçš„æ•°æ®çš„è·¯å¾„éƒ½æ”¾è¿›ä¸€ä¸ªStringæ•°ç»„
+			ArrayList<File> list = new ArrayList<File>();
+			File files = new File("D:/å®œé€šå·¥ä½œ/æ•°æ®é‡‡é›†/ä¼šè¯æ—¥å¿—/");
+			String[] zxFiles = files.list();
+			String zx = files + "/" + zxFiles[zxFiles.length - 1] + "/";
+			oneFile("D:/å®œé€šå·¥ä½œ/æ•°æ®é‡‡é›†/ç»Ÿè®¡/", list);
+			zxFile(zx, list);
+			// è¯»å–æ¯ä¸€ä¸ªè·¯å¾„ä¸‹çš„å†…å®¹
+			// è¯»å–æ–‡ä»¶å¤¹å†…çš„æ¯ä¸€ä¸ªæ–‡ä»¶
+			for (File readFile : list) {
+				
+				if (readFile.isDirectory()) {
+					continue;
+				}
+				fr = new FileReader(readFile);
+				br = new BufferedReader(fr);
+				String strLine = null;
+				while ((strLine = br.readLine()) != null) {
+					// æ ¹æ®è¯»å–çš„åç§°è°ƒç”¨ä¸åŒçš„ç±»æ–¹æ³•
+					if (readFile.getName().contains("AP")) {
+						ap.writeString(strLine, br);
+					} else if (readFile.getName().contains("ç”¨æˆ·")) {
+						user.writeString(strLine, br);
+					} else if (readFile.getName().contains("DHCP")) {
+						dhcp.writeString(strLine, br);
+					} else if (readFile.getName().contains("ä¸­å…´3æœŸAC01")) {
+						System.out.println(readFile.getName());
+						zxac.writeFirstString(strLine, br);
+						break;
+					} else if (readFile.getName().contains("ä¸­å…´3æœŸAC")) {
+						System.out.println(readFile.getName());
+						zxac.writeString(strLine, br);
+						break;
 					}
 				}
 			}
 		} catch (FileNotFoundException e) {
-			AppUI.addText("ÎÄ±¾´ò¿ª´íÎó»òÎŞ·¨´ò¿ª");
+			System.out.println("æ–‡æœ¬æ‰“å¼€é”™è¯¯æˆ–æ— æ³•æ‰“å¼€");
 			e.printStackTrace();
 		} catch (IOException e) {
-			AppUI.addText("¶ÁÈ¡ÎÄ±¾ĞĞ´íÎó");
+			System.out.println("è¯»å–æ–‡æœ¬è¡Œé”™è¯¯");
 			e.printStackTrace();
 		} finally {
 			try {
 				fr.close();
 				br.close();
 			} catch (IOException e1) {
-				AppUI.addText("Á÷¹Ø±ÕÊ±·¢Éú´íÎó");
+				System.out.println("æµå…³é—­æ—¶å‘ç”Ÿé”™è¯¯");
 				e1.printStackTrace();
 			}
 			try {
@@ -89,7 +95,41 @@ public class MainFile {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			AppUI.addText("ÎÄ¼ş½âÎöºÍĞ´ÈëÍê³É£¡");
+			System.out.println("æ–‡ä»¶è§£æå’Œå†™å…¥å®Œæˆï¼");
+			try {
+				Runtime.getRuntime().exec("cmd.exe /c "+path);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	/**
+	 * å»æ‰"D:/å®œé€šå·¥ä½œ/æ•°æ®é‡‡é›†/ç»Ÿè®¡/"é‡Œé‡å¤çš„æ–‡ä»¶,ç„¶åæŠŠä¸é‡å¤çš„åŠ å…¥å®¹å™¨ä¸­
+	 * @param path
+	 * @param list
+	 */
+	private static void oneFile(String path, ArrayList<File> list) {
+		File ap = null;
+		File user = null;
+		File dhcp = null;
+		for (String name : new File(path).list()) {
+			ap = name.contains("AP") ? new File(path, name) : ap;
+			user = name.contains("ç”¨æˆ·") ? new File(path, name) : user;
+			dhcp = name.contains("DHCP") ? new File(path, name) : dhcp;
+		}
+		list.add(ap);
+		list.add(user);
+		list.add(dhcp);
+	}
+	/**
+	 * æŠŠè·¯å¾„ä¸‹çš„æ‰€æœ‰æ–‡ä»¶åŠ å…¥åˆ°å®¹å™¨ä¸­
+	 * @param path
+	 * @param list
+	 */
+	private static void zxFile(String path, ArrayList<File> list) {
+		for (String name : new File(path).list()) {
+			list.add(new File(path, name));
 		}
 	}
 }

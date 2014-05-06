@@ -10,8 +10,8 @@ import jxl.write.biff.RowsExceededException;
 public class DhcpData {
 	private static int lie_0 = 0;
 	private static int lie_1 = 0;
-	private static int lie_2 = 0;
-	private static int lie_3 = 4;
+	private static int lie_2 = 1;
+	private static int lie_3 = 5;
 	private WritableSheet sheet;
 
 	DhcpData(WritableSheet sheet) {
@@ -19,30 +19,29 @@ public class DhcpData {
 	}
 
 	public void writeString(String string, BufferedReader br) {
-		if (string.contains("°ÁÌì2ÆÚ")) {
-			AppUI.addText(string);
+		if (string.contains("å‚²å¤©2æœŸ")) {
 			System.out.println(string);
 			readData(lie_0, 6, br, "AT");
 			lie_0++;
-		} else if (string.contains("°ÁÌì3ÆÚ")) {
-			AppUI.addText(string);
+		} else if (string.contains("å‚²å¤©3æœŸ")) {
 			System.out.println(string);
 			readData(lie_1, 9, br, "AT");
 			lie_1++;
-		} else if (string.contains("°ÁÌì4ÆÚ")) {
-			AppUI.addText(string);
+		} else if (string.contains("å‚²å¤©4æœŸ")) {
 			System.out.println(string);
 			readAt4Data(br);
-		} else if (string.contains("ÖĞĞË3ÆÚ")) {
-			AppUI.addText(string);
+		} else if (string.contains("ä¸­å…´3æœŸ")) {
 			System.out.println(string);
 			readData(lie_1, 9, br, "ZX");
 			lie_1++;
-		} else if (string.contains("»ªÈı4ÆÚ")) {
-			AppUI.addText(string);
+		} else if (string.contains("åä¸‰4æœŸ")) {
 			System.out.println(string);
-			readData(lie_2, 12, br, "HS");
-			lie_2++;
+			if(string.contains("å¾·èƒœ")){
+				readData(0, 12, br, "HS");
+			}else{
+				readData(lie_2, 12, br, "HS");
+				lie_2++;
+			}
 		} else {
 			// System.out.println("ZXT");
 		}
@@ -52,22 +51,26 @@ public class DhcpData {
 		String number = null;
 		try {
 			String str = br.readLine();
-			String[] stringData = str.split(" ");
+			String[] stringData = null;
 			if (name.equals("AT")) {
+				while(str.contains("warn")){
+					str = br.readLine();
+				}
+				stringData = str.split(" ");
 				number = AtData(stringData);
-				// ÒòÎªÊı¾İ¿ÉÄÜÓĞÁ½ĞĞ£¬ËùÒÔ¶ÁÈ¡Á½´Î¡£
+				// å› ä¸ºæ•°æ®å¯èƒ½æœ‰ä¸¤è¡Œï¼Œæ‰€ä»¥è¯»å–ä¸¤æ¬¡ã€‚
 				str = br.readLine();
 				stringData = str.split(" ");
 				if (str != null && !str.isEmpty() && !str.equals(" ")) {
 					number = String.valueOf(Integer.valueOf(number) + Integer.valueOf(AtData(stringData)));
 				}
 			} else if (name.equals("ZX") || name.equals("HS")) {
+				stringData = str.split(" ");
 				number = stringData[3];
 			}
-			AppUI.addText(number);
 			System.out.println(number);
 		} catch (IOException e) {
-			AppUI.addText("½âÎöDHCPÊı¾İÊ±,¶ÁÈ¡ÊıÖµ´íÎó");
+			System.out.println("è§£æDHCPæ•°æ®æ—¶,è¯»å–æ•°å€¼é”™è¯¯");
 			e.printStackTrace();
 		}
 		jxl.write.Number addNumber = new jxl.write.Number(lie, hang, Integer.valueOf(number));
@@ -76,10 +79,10 @@ public class DhcpData {
 			// sheet.addCell(label);
 			sheet.addCell(addNumber);
 		} catch (RowsExceededException e) {
-			AppUI.addText("½âÎöDHCPÊı¾İÊ±,±í¸ñ´íÎó");
+			System.out.println("è§£æDHCPæ•°æ®æ—¶,è¡¨æ ¼é”™è¯¯");
 			e.printStackTrace();
 		} catch (WriteException e) {
-			AppUI.addText("½âÎöDHCPÊı¾İÊ±,Êı¾İĞ´Èë´íÎó");
+			System.out.println("è§£æDHCPæ•°æ®æ—¶,æ•°æ®å†™å…¥é”™è¯¯");
 			e.printStackTrace();
 		}
 	}
@@ -93,27 +96,24 @@ public class DhcpData {
 				number = AtData(stringData);
 				if (number == null || number.isEmpty() || number.equals(" "))
 					break;
-				AppUI.addText(number);
 				System.out.println(number);
 				jxl.write.Number addNumber = new jxl.write.Number(lie_3, 12, Integer.valueOf(number));
-				// Label label = new Label(lie_3, 12, number);
 				try {
-					// sheet.addCell(label);
 					sheet.addCell(addNumber);
 				} catch (RowsExceededException e) {
-					AppUI.addText("½âÎöDHCPÊı¾İÊ±,±í¸ñ´íÎó");
+					System.out.println("è§£æDHCPæ•°æ®æ—¶,è¡¨æ ¼é”™è¯¯");
 					e.printStackTrace();
 				} catch (WriteException e) {
-					AppUI.addText("½âÎöDHCPÊı¾İÊ±,Êı¾İĞ´Èë´íÎó");
+					System.out.println("è§£æDHCPæ•°æ®æ—¶,æ•°æ®å†™å…¥é”™è¯¯");
 					e.printStackTrace();
 				}
 				lie_3++;
 			}
 		} catch (NumberFormatException e) {
-			AppUI.addText("½âÎöDHCPÊı¾İÊ±,×ª»»Integer´íÎó");
+			System.out.println("è§£æDHCPæ•°æ®æ—¶,è½¬æ¢Integeré”™è¯¯");
 			e.printStackTrace();
 		} catch (IOException e) {
-			AppUI.addText("½âÎöDHCPÊı¾İÊ±,IO´íÎó");
+			System.out.println("è§£æDHCPæ•°æ®æ—¶,IOé”™è¯¯");
 			e.printStackTrace();
 		}
 	}
@@ -122,7 +122,7 @@ public class DhcpData {
 		String number = null;
 		int num = 0;
 		for (String data : stringData) {
-			// ³ıÈ¥¿Õ¸ñ
+			// é™¤å»ç©ºæ ¼
 			if (data.equals(" ") || data.isEmpty()) {
 			} else {
 				num++;

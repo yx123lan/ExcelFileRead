@@ -12,8 +12,8 @@ public class UserData {
 
 	private static int lie_0 = 0;
 	private static int lie_1 = 0;
-	private static int lie_2 = 0;
-	private static int lie_3 = 4;
+	private static int lie_2 = 1;
+	private static int lie_3 = 5;
 	private WritableSheet sheet;
 
 	UserData(WritableSheet sheet) {
@@ -21,30 +21,29 @@ public class UserData {
 	}
 
 	public void writeString(String string, BufferedReader br) {
-		if (string.contains("°ÁÌì2ÆÚ")) {
-			AppUI.addText(string);
+		if (string.contains("å‚²å¤©2æœŸ")) {
 			System.out.println(string);
 			readData(lie_0, 5, br, "AT");
 			lie_0++;
-		} else if (string.contains("°ÁÌì3ÆÚ")) {
-			AppUI.addText(string);
+		} else if (string.contains("å‚²å¤©3æœŸ")) {
 			System.out.println(string);
 			readData(lie_1, 8, br, "AT");
 			lie_1++;
-		} else if (string.contains("°ÁÌì4ÆÚ")) {
-			AppUI.addText(string);
+		} else if (string.contains("å‚²å¤©4æœŸ")) {
 			System.out.println(string);
 			readAt4Data(br);
-		} else if (string.contains("ÖĞĞË3ÆÚ")) {
-			AppUI.addText(string);
+		} else if (string.contains("ä¸­å…´3æœŸ")) {
 			System.out.println(string);
 			readData(lie_1, 8, br, "ZX");
 			lie_1++;
-		} else if (string.contains("»ªÈı4ÆÚ")) {
-			AppUI.addText(string);
+		} else if (string.contains("åä¸‰4æœŸ")) {
 			System.out.println(string);
-			readData(lie_2, 11, br, "HS");
-			lie_2++;
+			if(string.contains("å¾·èƒœ")){
+				readData(0, 11, br, "HS");
+			}else{
+				readData(lie_2, 11, br, "HS");
+				lie_2++;
+			}
 		}
 	}
 
@@ -58,10 +57,9 @@ public class UserData {
 			} else if (name.equals("ZX") || name.equals("HS")) {
 				number = stringData[2];
 			}
-			AppUI.addText(number);
 			System.out.println(number);
 		} catch (IOException e) {
-			AppUI.addText("½âÎöÓÃ»§ÔÚÏßÊı¾İÊ±,¶ÁÈ¡ÊıÖµ´íÎó");
+			System.out.println("è§£æç”¨æˆ·åœ¨çº¿æ•°æ®æ—¶,è¯»å–æ•°å€¼é”™è¯¯");
 			e.printStackTrace();
 		}
 		jxl.write.Number addNumber = new jxl.write.Number(lie, hang, Integer.valueOf(number));
@@ -70,10 +68,10 @@ public class UserData {
 			// sheet.addCell(label);
 			sheet.addCell(addNumber);
 		} catch (RowsExceededException e) {
-			AppUI.addText("½âÎöÓÃ»§ÔÚÏßÊı¾İÊ±,±í¸ñ´íÎó");
+			System.out.println("è§£æç”¨æˆ·åœ¨çº¿æ•°æ®æ—¶,è¡¨æ ¼é”™è¯¯");
 			e.printStackTrace();
 		} catch (WriteException e) {
-			AppUI.addText("½âÎöÓÃ»§ÔÚÏßÊı¾İÊ±,Êı¾İĞ´Èë´íÎó");
+			System.out.println("è§£æç”¨æˆ·åœ¨çº¿æ•°æ®æ—¶,æ•°æ®å†™å…¥é”™è¯¯");
 			e.printStackTrace();
 		}
 	}
@@ -87,42 +85,41 @@ public class UserData {
 			while ((str = br.readLine()) != null) {
 				oldNumber = number;
 				String[] stringData = str.split(" ");
-				// ÓÃ»§ÊıµÄÊı¾İÔÚ·Ö½â³öÀ´µÄ×Ö·û´®Êı×éµÄ×îºóÎ»ÖÃÉÏ£¬ĞèÒª¶ÁÈ¡×Ö·û´®Êı×éµÄ×îºóÒ»¸ö×Ö·û´®
+				// ç”¨æˆ·æ•°çš„æ•°æ®åœ¨åˆ†è§£å‡ºæ¥çš„å­—ç¬¦ä¸²æ•°ç»„çš„æœ€åä½ç½®ä¸Šï¼Œéœ€è¦è¯»å–å­—ç¬¦ä¸²æ•°ç»„çš„æœ€åä¸€ä¸ªå­—ç¬¦ä¸²
 				number = stringData[stringData.length - 1];
-				AppUI.addText(number);
 				System.out.println(number);
 				if (number == null || number.isEmpty() || number.equals(" "))
 					break;
-				// ¼ì²éÊıÖµÊÇ·ñÏàÍ¬£¬ÒòÎªÓĞ¿ÉÄÜÓĞÒ»´ÎÖØ¸´µÄÊı¾İ¡£
+				// æ£€æŸ¥æ•°å€¼æ˜¯å¦ç›¸åŒï¼Œå› ä¸ºæœ‰å¯èƒ½æœ‰ä¸€æ¬¡é‡å¤çš„æ•°æ®ã€‚
 				if (number.equals(oldNumber)) {
 					if (num == 1) {
-						// µ±¼ÆÊıÆ÷Îª1Ê±£¬ËµÃ÷ÒÑ¾­Óöµ½¹ıÒ»´ÎÏàÍ¬µÄÁË£¬Í¬Ê±²»ÔÙ¼ì²éÊıÖµÊÇ·ñÏàÍ¬
+						// å½“è®¡æ•°å™¨ä¸º1æ—¶ï¼Œè¯´æ˜å·²ç»é‡åˆ°è¿‡ä¸€æ¬¡ç›¸åŒçš„äº†ï¼ŒåŒæ—¶ä¸å†æ£€æŸ¥æ•°å€¼æ˜¯å¦ç›¸åŒ
 					} else {
 						num++;
 						continue;
 					}
 				}
 				jxl.write.Number addNumber = new jxl.write.Number(lie_3, 11, Integer.valueOf(number));
-				// ¼ÆÊıÆ÷ÇåÁã
+				// è®¡æ•°å™¨æ¸…é›¶
 				num = 0;
 				// Label label = new Label(lie_3, 11, number);
 				try {
 					// sheet.addCell(label);
 					sheet.addCell(addNumber);
 				} catch (RowsExceededException e) {
-					AppUI.addText("½âÎöÓÃ»§ÔÚÏßÊı¾İÊ±,±í¸ñ´íÎó");
+					System.out.println("è§£æç”¨æˆ·åœ¨çº¿æ•°æ®æ—¶,è¡¨æ ¼é”™è¯¯");
 					e.printStackTrace();
 				} catch (WriteException e) {
-					AppUI.addText("½âÎöÓÃ»§ÔÚÏßÊı¾İÊ±,Êı¾İĞ´Èë´íÎó");
+					System.out.println("è§£æç”¨æˆ·åœ¨çº¿æ•°æ®æ—¶,æ•°æ®å†™å…¥é”™è¯¯");
 					e.printStackTrace();
 				}
 				lie_3++;
 			}
 		} catch (NumberFormatException e) {
-			AppUI.addText("½âÎöÓÃ»§ÔÚÏßÊı¾İÊ±,×ª»»Integer´íÎó");
+			System.out.println("è§£æç”¨æˆ·åœ¨çº¿æ•°æ®æ—¶,è½¬æ¢Integeré”™è¯¯");
 			e.printStackTrace();
 		} catch (IOException e) {
-			AppUI.addText("½âÎöÓÃ»§ÔÚÏßÊı¾İÊ±,IO´íÎó");
+			System.out.println("è§£æç”¨æˆ·åœ¨çº¿æ•°æ®æ—¶,IOé”™è¯¯");
 			e.printStackTrace();
 		}
 	}
