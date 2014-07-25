@@ -1,14 +1,14 @@
 package com.zxt.main;
 
-import java.awt.TextArea;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 public class MyPrintStream extends PrintStream {
-	private TextArea text;
-	public MyPrintStream(OutputStream out, TextArea text) {
+	private JTextArea text;
+	public MyPrintStream(OutputStream out, JTextArea text) {
 		super(out);
 		this.text = text;
 		// TODO Auto-generated constructor stub
