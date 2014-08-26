@@ -72,12 +72,10 @@ public class DhcpData {
 			}
 			number = StringUtil.getAtDHCP(str);
 			// 因为数据可能有两行，所以读下一行不为空时，再读取一次数据然后和原来的数值相加。
-			if ((str = br.readLine()) == null || str.isEmpty() || str.equals(" ")) {
-				writeSheet(hang, lie, number, sheet);
-			} else {
+			while((str = br.readLine()) != null && !str.isEmpty() && !str.equals(" ")){
 				number += StringUtil.getAtDHCP(str);
-				writeSheet(hang, lie, number, sheet);
 			}
+			writeSheet(hang, lie, number, sheet);
 			System.out.println(number);
 		} catch (IOException e) {
 			e.printStackTrace();
